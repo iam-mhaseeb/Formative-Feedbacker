@@ -25,7 +25,10 @@ SECRET_KEY = 'brzqu#0emd+uny$z(mg288q4%9-^+=8j_w+w3@o@8ty#%k0vr='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'formative-feedbacker.herokuapp.com',
+    '127.0.0.1'
+]
 
 
 # Application definition
