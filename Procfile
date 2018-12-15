@@ -1,1 +1,1 @@
-web: gunicorn Formative-Feedbacker.wsgi:application --log-file -
+web: gunicorn Formative_Feedbacker.wsgi:application --log-file -
