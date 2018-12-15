@@ -82,6 +82,7 @@ celerybeat-schedule
 *.sage.py
 
 # Environments
+formative_feedbacker_venv/
 .env
 .venv
 env/
@@ -102,3 +103,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+#idea
+.idea/
