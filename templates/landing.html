@@ -1,0 +1,438 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+<head>
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="account/img/fav.png">
+    <!-- Author Meta -->
+    <meta name="author" content="colorlib">
+    <!-- Meta Description -->
+    <meta name="description" content="">
+    <!-- Meta Keyword -->
+    <meta name="keywords" content="">
+    <!-- meta character set -->
+    <meta charset="UTF-8">
+    <!-- Site Title -->
+    <title>Formative Feedbacker</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+        <!--
+        CSS
+        ============================================= -->
+        <!-- <link rel="stylesheet" href="css/linearicons.css"> -->
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'accounts/css/font-awesome.min.css' %} ">
+        <link rel="stylesheet" href="{% static 'accounts/css/bootstrap.css' %} " >
+        <!-- <link rel="stylesheet" href="css/magnific-popup.css">
+        <link rel="stylesheet" href="css/nice-select.css">
+         --><link rel="stylesheet" href="{% static 'accounts/css/animate.min.css' %} ">
+        <link rel="stylesheet" href="{% static 'accounts/css/owl.carousel.css' %}">
+        <link rel="stylesheet" href="{% static 'accounts/css/jquery-ui.css' %}">
+        <link rel="stylesheet" href="{% static 'accounts/css/main.css' %} ">
+    </head>
+    <body>
+      <header id="header" id="home">
+        <div class="container main-menu">
+            <div class="row align-items-center justify-content-between d-flex">
+              <div id="logo">
+                <a href="{% url 'dashboard:landing' %}"><img src="{% static 'accounts/img/logo1.png' %} " alt="" title="" /></a>
+              </div>
+              <nav id="nav-menu-container">
+                <ul class="nav-menu">
+                  <li><a href="{% url 'dashboard:landing' %}">Home</a></li>
+                </ul>
+              </nav><!-- #nav-menu-container -->
+            </div>
+        </div>
+      </header><!-- #header -->
+
+        <!-- start banner Area -->
+        <section class="banner-area relative" id="home">
+            <div class="overlay overlay-bg"></div>
+            <div class="container">
+                <div class="row fullscreen d-flex align-items-center justify-content-between">
+                    <div class="banner-content col-lg-9 col-md-12">
+                        <h1 class="text-uppercase">
+                            We Ensure better education
+                            for a better world
+                        </h1>
+                        <p class="pt-10 pb-10">
+                            We Evaluate the Essays and Free texts by using the text analysis algorithms
+                        </p>
+                        <div class="container" >
+                            <div class="row">
+                                <div class="col-md-12 ">
+                                    <h3 style="color: white;">Extracting Concept and it's relation</h3>
+                                    <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:feedback' %}">
+                                        {% csrf_token %}
+                                      <div class="form-group">
+                                      <label for="usr">Title:</label>
+                                      <input type="text" class="form-control" id="title" name="title" placeholder="Enter Title here.." required>
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <textarea rows="18" cols="140"  name="text" id="text">{{text}}</textarea> -->
+                                        <textarea class="form-control" name="text" rows="10" id="text" placeholder="Enter context here.." required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                       <label class="primary-btn text-uppercase  btn-file">
+                                            Process Text <input type="submit" name="process"  style="display: none;"  >
+                                        </label>
+                                    </div>
+                                  </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End banner Area -->
+
+        <!-- Start feature Area -->
+        <section class="feature-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="single-feature">
+                            <div class="title">
+                                <h4>Finding Relevant Concepts</h4>
+                            </div>
+                            <div class="desc-wrap">
+                                <p>
+                                    Text Analysis and finding the relevant concepts from Free Texts to get understand what really text is saying.
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="single-feature">
+                            <div class="title">
+                                <h4>Multiple Access</h4>
+                            </div>
+                            <div class="desc-wrap">
+                                <p>
+                                    Formative Feedbacker provide the multiple accounts access for students and teachers with authorizationa and authentication process.
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="single-feature">
+                            <div class="title">
+                                <h4>Instant Feedback</h4>
+                            </div>
+                            <div class="desc-wrap">
+                                <p>
+                                    Formative Feedbacker provide the feature of instant feedback in the form of cloud wordly woodle.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End feature Area -->
+
+        <!-- Start popular-course Area -->
+        <section class="popular-course-area section-gap">
+            <div class="container">
+                <div class="row d-flex justify-content-center">
+                    <div class="menu-content pb-70 col-lg-8">
+                        <div class="title text-center">
+                            <h1 class="mb-10">Our Team</h1>
+                            <p>We have a diversified team with the expertise in their respected domains</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="active-popular-carusel">
+                        <div class="single-popular-carusel">
+                            <div class="thumb-wrap relative">
+                                <div class="thumb relative">
+                                    <div class="overlay overlay-bg"></div>
+                                    <img class="img-fluid" src="{% static 'accounts/img/ali.jpg' %} " alt="">
+                                </div>
+                                <div class="meta d-flex justify-content-between">
+                                    <p><span class="lnr lnr-users"></span>  <span class="lnr lnr-bubble"></span></p>
+                                    <h4></h4>
+                                </div>
+                            </div>
+                            <div class="details">
+                                <a href="#">
+                                    <h4>
+                                        Ali Tahir
+                                    </h4>
+                                </a>
+                                <p>
+                                Web developer and Graphic Designer
+                                </p>
+                            </div>
+                        </div>
+                        <div class="single-popular-carusel">
+                            <div class="thumb-wrap relative">
+                                <div class="thumb relative">
+                                    <div class="overlay overlay-bg"></div>
+                                    <img class="img-fluid" src="{% static 'accounts/img/mehroz.jpg' %}" alt="">
+                                </div>
+                                <div class="meta d-flex justify-content-between">
+                                    <p><span class="lnr lnr-users"></span> 355 <span class="lnr lnr-bubble"></span></p>
+                                    <h4></h4>
+                                </div>
+                            </div>
+                            <div class="details">
+                                <a href="#">
+                                    <h4>
+                                    Mehroz Ahmad
+                                    </h4>
+                                </a>
+                                <p>
+                                    Web Development Expert
+                                </p>
+                            </div>
+                        </div>
+                        <div class="single-popular-carusel">
+                            <div class="thumb-wrap relative">
+                                <div class="thumb relative">
+                                    <div class="overlay overlay-bg"></div>
+                                    <img class="img-fluid" src="{% static 'accounts/img/haseeb.jpg' %}" alt="">
+                                </div>
+                                <div class="meta d-flex justify-content-between">
+                                    <p><span class="lnr lnr-users"></span> 355 <span class="lnr lnr-bubble"></span></p>
+                                    <h4></h4>
+                                </div>
+                            </div>
+                            <div class="details">
+                                <a href="#">
+                                    <h4>
+                                        Muhammad Haseeb
+                                    </h4>
+                                </a>
+                                <p>
+                                    Machine Learning Expert
+                                </p>
+                            </div>
+                        </div>
+
+
+                        <div class="single-popular-carusel">
+                            <div class="thumb-wrap relative">
+                                <div class="thumb relative">
+                                    <div class="overlay overlay-bg"></div>
+                                    <img class="img-fluid" src="{% static 'accounts/img/mohsin.jpg' %}" alt="">
+                                </div>
+                                <div class="meta d-flex justify-content-between">
+                                    <p><span class="lnr lnr-users"></span> 355 <span class="lnr lnr-bubble"></span>35</p>
+                                    <h4></h4>
+                                </div>
+                            </div>
+                            <div class="details">
+                                <a href="#">
+                                    <h4>
+                                        Mohsin Abbas
+                                    </h4>
+                                </a>
+                                <p>
+                                    Associate Professor at University of Central Punjab
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End popular-course Area -->
+
+
+        <!-- Start search-course Area -->
+        <section class="search-course-area relative">
+            <div class="overlay overlay-bg"></div>
+            <div class="container">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-lg-6 col-md-6 search-course-left">
+                        <br>
+                        <h1 class="text-white">
+                            We Love to <br>
+                            Summerize text for you!
+                        </h1>
+                        <p>
+                            We are extracting the relevant concepts from the free text or Essays by analysing and processing with high precision.
+                        </p>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!-- End search-course Area -->
+
+
+        <!-- Start upcoming-event Area -->
+        <section class="upcoming-event-area section-gap">
+            <div class="container">
+                <div class="row d-flex justify-content-center">
+                    <div class="menu-content pb-70 col-lg-8">
+                        <div class="title text-center">
+                            <h1 class="mb-10">Upcoming Updates</h1>
+                            <p>The upcoming updates which is in research and will be available soon..</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="active-upcoming-event-carusel">
+                        <div class="single-carusel row align-items-center">
+                            <div class="col-12 col-md-6 thumb">
+                                <img class="img-fluid" src="{% static 'accounts/img/framework.png' %}" alt="">
+                            </div>
+                            <div class="detials col-12 col-md-6">
+                                <p>Release expected: 25th September, 2019</p>
+                                <a href="#"><h4>Open Sourcing the Framework</h4></a>
+                                <p>
+                                    We will Open-source the framework in a near future.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End upcoming-event Area -->
+
+
+        <!-- Start cta-one Area -->
+        <section class="cta-one-area relative section-gap">
+            <div class="container">
+                <div class="overlay overlay-bg"></div>
+                <div class="row justify-content-center">
+                    <div class="wrap">
+                        <h1 class="text-white">Make an Evaluator SMART</h1>
+                        <p>
+                            Evaluator can review and provide the instant feedback to their students for improvisation.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End cta-one Area -->
+
+        <!-- Start blog Area -->
+        <!-- <section class="blog-area section-gap" id="blog">
+            <div class="container">
+                <div class="row d-flex justify-content-center">
+                    <div class="menu-content pb-70 col-lg-8">
+                        <div class="title text-center">
+                            <h1 class="mb-10">Latest posts from our Blog</h1>
+                            <p>In the history of modern astronomy there is.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 single-blog">
+                        <div class="thumb">
+                            <img class="img-fluid" src="img/b1.jpg" alt="">
+                        </div>
+                        <p class="meta">25 April, 2018  |  By <a href="#">Mark Wiens</a></p>
+                        <a href="blog-single.html">
+                            <h5>Addiction When Gambling Becomes A Problem</h5>
+                        </a>
+                        <p>
+                            Computers have become ubiquitous in almost every facet of our lives. At work, desk jockeys spend hours in front of their.
+                        </p>
+                        <a href="#" class="details-btn d-flex justify-content-center align-items-center"><span class="details">Details</span><span class="lnr lnr-arrow-right"></span></a>
+                    </div>
+                    <div class="col-lg-3 col-md-6 single-blog">
+                        <div class="thumb">
+                            <img class="img-fluid" src="img/b2.jpg" alt="">
+                        </div>
+                        <p class="meta">25 April, 2018  |  By <a href="#">Mark Wiens</a></p>
+                        <a href="blog-single.html">
+                            <h5>Computer Hardware Desktops And Notebooks</h5>
+                        </a>
+                        <p>
+                            Ah, the technical interview. Nothing like it. Not only does it cause anxiety, but it causes anxiety for several different reasons.
+                        </p>
+                        <a href="#" class="details-btn d-flex justify-content-center align-items-center"><span class="details">Details</span><span class="lnr lnr-arrow-right"></span></a>
+                    </div>
+                    <div class="col-lg-3 col-md-6 single-blog">
+                        <div class="thumb">
+                            <img class="img-fluid" src="img/b3.jpg" alt="">
+                        </div>
+                        <p class="meta">25 April, 2018  |  By <a href="#">Mark Wiens</a></p>
+                        <a href="blog-single.html">
+                            <h5>Make Myspace Your Best Designed Space</h5>
+                        </a>
+                        <p>
+                            Plantronics with its GN Netcom wireless headset creates the next generation of wireless headset and other products such as wireless.
+                        </p>
+                        <a href="#" class="details-btn d-flex justify-content-center align-items-center"><span class="details">Details</span><span class="lnr lnr-arrow-right"></span></a>
+                    </div>
+                    <div class="col-lg-3 col-md-6 single-blog">
+                        <div class="thumb">
+                            <img class="img-fluid" src="img/b4.jpg" alt="">
+                        </div>
+                        <p class="meta">25 April, 2018  |  By <a href="#">Mark Wiens</a></p>
+                        <a href="blog-single.html">
+                            <h5>Video Games Playing With Imagination</h5>
+                        </a>
+                        <p>
+                            About 64% of all on-line teens say that do things online that they wouldn’t want their parents to know about.   11% of all adult internet
+                        </p>
+                        <a href="#" class="details-btn d-flex justify-content-center align-items-center"><span class="details">Details</span><span class="lnr lnr-arrow-right"></span></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+         End blog Area ->
+         -->
+
+        <!-- Start cta-two Area -->
+        <section class="cta-two-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 cta-left">
+                        <h1>Not Yet Satisfied with our Services? Give Recommendations</h1>
+                    </div>
+                    <div class="col-lg-4 cta-right">
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End cta-two Area -->
+
+        <!-- start footer Area -->
+        <footer class="footer-area section-gap">
+            <div class="container">
+                <div class="footer-bottom row align-items-center justify-content-between">
+                    <p class="footer-text m-0 col-lg-6 col-md-12"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;Formative Feedbacker All rights reserved
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                </div>
+            </div>
+        </footer>
+        <!-- End footer Area -->
+
+        {% load static %}
+        <script src="{% static 'accounts/js/vendor/jquery-2.2.4.min.js' %} "></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="{% static 'accounts/js/vendor/bootstrap.min.js' %} "></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
+          <script src="{% static 'accounts/js/easing.min.js' %}"></script>
+        <script src="{% static 'accounts/js/hoverIntent.js' %}"></script>
+        <script src="{% static 'accounts/js/superfish.min.js' %}"></script>
+        <script src="{% static 'accounts/js/jquery.ajaxchimp.min.js' %}"></script>
+        <script src="{% static 'accounts/js/jquery.magnific-popup.min.js' %}"></script>
+        <script src="{% static 'accounts/js/jquery.tabs.min.js' %}"></script>
+        <script src="{% static 'accounts/js/jquery.nice-select.min.js' %}"></script>
+        <script src="{% static 'accounts/js/owl.carousel.min.js' %}"></script>
+        <script src="{% static 'accounts/js/mail-script.js' %}"></script>
+        <script src="{% static 'accounts/js/main.js' %}"></script>
+    </body>
+</html>

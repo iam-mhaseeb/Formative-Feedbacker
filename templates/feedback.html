@@ -1,0 +1,116 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+<head>
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="img/fav.png">
+    <!-- Author Meta -->
+    <meta name="author" content="colorlib">
+    <!-- Meta Description -->
+    <meta name="description" content="">
+    <!-- Meta Keyword -->
+    <meta name="keywords" content="">
+    <!-- meta character set -->
+    <meta charset="UTF-8">
+    <!-- Site Title -->
+    <title>Formative Feedbacker</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+        <!--
+        CSS
+        ============================================= -->
+        <!-- <link rel="stylesheet" href="css/linearicons.css"> -->
+
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'accounts/css/font-awesome.min.css' %} ">
+        <link rel="stylesheet" href="{% static 'accounts/css/bootstrap.css' %} " >
+        <!-- <link rel="stylesheet" href="css/magnific-popup.css">
+        <link rel="stylesheet" href="css/nice-select.css">
+         --><link rel="stylesheet" href="{% static 'accounts/css/animate.min.css' %} ">
+        <link rel="stylesheet" href="{% static 'accounts/css/owl.carousel.css' %}">
+        <link rel="stylesheet" href="{% static 'accounts/css/jquery-ui.css' %}">
+        <link rel="stylesheet" href="{% static 'accounts/css/main.css' %} ">
+    </head>
+    <body>
+      <header id="header" id="home">
+        <div class="container main-menu">
+            <div class="row align-items-center justify-content-between d-flex">
+              <div id="logo">
+                <a href="{% url 'dashboard:landing' %}"><img src="{% static 'accounts/img/logo1.png' %} " alt="" title="" /></a>
+              </div>
+              <nav id="nav-menu-container">
+                <ul class="nav-menu">
+                  <li><a href="{% url 'dashboard:landing' %}">Home</a></li>
+                </ul>
+              </nav><!-- #nav-menu-container -->
+            </div>
+        </div>
+      </header><!-- #header -->
+
+        <!-- start banner Area -->
+        <section class="banner-area relative" id="home">
+            <div class="overlay overlay-bg"></div>
+            <div class="container">
+                <div class="row  d-flex align-items-center justify-content-between" style="padding-bottom: 10%;">
+
+
+                </div>
+            </div>
+        </section>
+        <!-- End banner Area -->
+                <br><br>
+        <section>
+            <div class="container" >
+                <div class="row">
+                    <div class="col-md-12 ">
+                    <!-- Content here -->
+                        <center><h2>Feedback on your Text</h2></center>
+                        {% load static %}
+                        <img class="img-fluid" src="{% static 'wordle.png' %}" alt="">
+                        <hr>
+                        <center><h2>Concepts Distribution Chart</h2></center>
+                        <center><img class="img-fluid" src="{% static 'pi_chart.png' %}" alt=""></center>
+                        <hr>
+                        <center><h2>Correlation Map</h2></center>
+                        <a href="{% static 'heatmap.png' %}" target="_blank">
+                            <img class="img-fluid" src="{% static 'heatmap.png' %}" alt="Relation Map">
+                        </a>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- start footer Area -->
+        <footer class="footer-area section-gap">
+            <div class="container">
+                <div class="footer-bottom row align-items-center justify-content-between">
+                    <p class="footer-text m-0 col-lg-6 col-md-12"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;Formative Feedbacker All rights reserved
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                </div>
+            </div>
+        </footer>
+        <!-- End footer Area -->
+
+
+        <script src="js/vendor/jquery-2.2.4.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
+          <script src="js/easing.min.js"></script>
+        <script src="js/hoverIntent.js"></script>
+        <script src="js/superfish.min.js"></script>
+        <script src="js/jquery.ajaxchimp.min.js"></script>
+        <script src="js/jquery.magnific-popup.min.js"></script>
+        <script src="js/jquery.tabs.min.js"></script>
+        <script src="js/jquery.nice-select.min.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/mail-script.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
