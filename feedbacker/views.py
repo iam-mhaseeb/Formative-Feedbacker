@@ -1,30 +1,27 @@
-import os
-import glob
 import nltk
 import string
-from collections import OrderedDict
-
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import wikipedia
 import matplotlib.pyplot as plt
 
-from nltk.stem.porter import PorterStemmer
-from nltk.stem import WordNetLemmatizer
-from nltk.tag import UnigramTagger, BigramTagger
-
-from gensim import corpora, models, similarities
-from gensim.test.utils import common_dictionary, common_corpus
-from gensim.models import LsiModel
-from operator import itemgetter, attrgetter, methodcaller
 
 from os import path
-import numpy as np
 from PIL import Image
-import wikipedia
 from wordcloud import WordCloud, STOPWORDS
-
 from django.shortcuts import render, redirect
+from collections import OrderedDict
+
+
+#from nltk.stem.porter import PorterStemmer
+#from nltk.stem import WordNetLemmatizer
+#from nltk.tag import UnigramTagger, BigramTagger
+
+#from gensim import corpora, models, similarities
+#from gensim.test.utils import common_dictionary, common_corpus
+#from gensim.models import LsiModel
+#from operator import itemgetter, attrgetter, methodcaller
 
 
 ####GLOBALS####
@@ -54,10 +51,7 @@ def feedback(request):
     if request.method == "POST":
         title = request.POST.get("title")
         content = request.POST.get("content")
-
-        parsing()
-        run_lsa(content)
-        use_top = 10  # use top files from most relevent doc
+        use_top = 6  # use most relevent doc
         count = 0
         both = 0.0
         A_c = 0.0
@@ -124,7 +118,7 @@ def feedback(request):
             wiki_concepts_7 = [word for word in nltk.word_tokenize(text_7) if word not in stoplist]
             pass  # do nothing
         except Exception as e:
-            print("there is an error while fetching wiki data ++++")
+            print(e," |there is an error while fetching wiki data ++++")
         check = 1
 
         for ci in consepts_in_user_provided_doc:
@@ -144,8 +138,7 @@ def feedback(request):
                         words = wiki_concepts_6
                     elif (x == 9 and check == 0):
                         words = wiki_concepts_7
-                    else:
-                        words = documents[document_numbers[x]].lower().split()
+                    
                     if ci in words:
                         search[count][0] = 1  # ci(A) is found in count file #
                     if cj in words:
@@ -257,83 +250,9 @@ def feedback(request):
         else:
             create_wordcloud(wordle_text)
 
-        temp_list = []
-        i = 0
-        while i < 10:
-            temp_list.append(titles[document_numbers[i]])
-            i = i + 1
-        matched = ""
-
         return render(request, "feedback.html")
     else:
         return redirect('dashboard:landing')
-
-
-def parsing():
-    path = 'static/accounts/p'
-    for filename in glob.glob(os.path.join(path, '*.txt')):
-        file =  open(filename, 'r')
-        lines = file.readlines()
-        if(len(lines)>1):
-            titles.append(lines[0].replace('\n','').decode('utf8'))
-            documents.append(lines[1].replace('\n','').decode('utf8'))
-        file.close()
-
-
-def init_lsa():
-    # remove common words and tokenize them
-    texts = [[word for word in document.lower().split() if word not in stoplist] for document in documents]#removing stop words
-    # tagged = []
-    # for text in texts:
-    #     tagged.append(nltk.pos_tag(text))
-    # updated_texts = []
-    # for tagged_list in tagged:
-    #     updated_words = []
-    #     updated_words = [word for word,pos in tagged_list if is_noun(pos)]#extracting only nouns
-    #     updated_texts.append(updated_words)
-    # texts = updated_texts
-    porter_stemmer = PorterStemmer()#stemming variable
-    wordnet_lemmatizer = WordNetLemmatizer()#lemitization variable
-    lemitized_lists = []
-    for text in texts:
-        lemitized_words  = []
-        for word in text:
-            stemmed_word = porter_stemmer.stem(word)#Stemming
-            lemitized_words.append(wordnet_lemmatizer.lemmatize(stemmed_word))#lemitization
-        lemitized_lists.append(lemitized_words)
-    texts = lemitized_lists
-    dictionary = corpora.Dictionary(texts)
-    corpus = [dictionary.doc2bow(text) for text in texts]
-    corpora.MmCorpus.serialize('articles_corpus.mm', corpus) # save corpus at local director
-    corpus = corpora.MmCorpus('articles_corpus.mm') # try to load the saved corpus from local
-    tfidf = models.TfidfModel(corpus) # step 1 -- initialize a model
-    corpus_tfidf = tfidf[corpus]  # map corpus object into tfidf space
-    lsi = models.LsiModel(corpus_tfidf, num_topics=len(texts)) # initialize LSI
-    lsi.save('lsa_trainned_model.lsi')  # save output model at local directory
-
-
-def run_lsa(user_doc):
-    lsi = models.LsiModel.load('static/lsa_trainned_model.lsi')
-    doc = user_doc
-    texts = [word for word in nltk.word_tokenize(doc) if word not in stoplist]
-    porter_stemmer = PorterStemmer()
-    wordnet_lemmatizer = WordNetLemmatizer()
-    lemitized_words = []
-    for word in texts:
-        stemmped_word = porter_stemmer.stem(word)  # stemming
-        lemitized_words.append(wordnet_lemmatizer.lemmatize(stemmped_word))  # lemitization
-    texts = lemitized_words
-    corpus = corpora.MmCorpus('articles_corpus.mm')  # try to load the saved corpus from local
-    dictionary = corpora.Dictionary.from_corpus(corpus)
-    vec_bow = dictionary.doc2bow(texts)  # put newly obtained document to existing dictionary object
-    vec_lsi = lsi[vec_bow]  # convert new document (henceforth, call it "query") to LSI space
-    index = similarities.MatrixSimilarity(lsi[corpus])  # transform corpus to LSI space and indexize it
-    sims = index[vec_lsi]  # calculate degree of similarity of the query to existing corpus
-    list2 = list(enumerate(sims))
-    list3 = sorted(list2, key=lambda x: x[1], reverse=True)
-    for document_number, document_similarity in (list3):
-        document_numbers.append(document_number)
-        document_similarities.append(document_similarity)
 
 
 def create_wordcloud(text):
