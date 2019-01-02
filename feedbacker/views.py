@@ -6,23 +6,11 @@ import seaborn as sns
 import wikipedia
 import matplotlib.pyplot as plt
 
-
 from os import path
 from PIL import Image
 from wordcloud import WordCloud, STOPWORDS
 from django.shortcuts import render, redirect
 from collections import OrderedDict
-
-
-#from nltk.stem.porter import PorterStemmer
-#from nltk.stem import WordNetLemmatizer
-#from nltk.tag import UnigramTagger, BigramTagger
-
-#from gensim import corpora, models, similarities
-#from gensim.test.utils import common_dictionary, common_corpus
-#from gensim.models import LsiModel
-#from operator import itemgetter, attrgetter, methodcaller
-
 
 ####GLOBALS####
 is_noun = lambda pos: pos[:2] == 'NN'
@@ -31,7 +19,8 @@ titles = []
 input_doc = ""
 document_numbers = []
 document_similarities = []
-stoplist = set(", & && || : ; < > ] [ { } 's 'S $ # % * - | + ) ( ! ~ ` `` 'u u' inn \u0631\u0627\u062d\u06cc\u0644 \u0634\u0631\u06cc\u0641\u202c @ a /br > < -- . able about above abroad according accordingly across actually adj after afterwards again against ago ahead ain't all allow allows almost alone along alongside already also although always am amid amidst among amongst an and another any anybody anyhow anyone anything anyway anyways anywhere apart appear appreciate appropriate are aren't around as a's aside ask asking associated at available away awfully b back backward backwards be became because become becomes becoming been before beforehand begin behind being believe below beside besides best better between beyond both brief but by c came can cannot cant can't caption cause causes certain certainly changes clearly c'mon co co. com come comes concerning consequently consider considering contain containing contains corresponding could couldn't course c's currently d dare daren't definitely described despite did didn't different directly do does doesn't doing done don't down downwards during e each edu eg eight eighty either else elsewhere end ending enough entirely especially et etc even ever evermore every everybody everyone everything everywhere ex exactly example except f fairly far farther few fewer fifth first five followed following follows for forever former formerly forth forward found four from further furthermore g get gets getting given gives go goes going gone got gotten greetings h had hadn't half happens hardly has hasn't have haven't having he he'd he'll hello help hence her here hereafter hereby herein here's hereupon hers herself he's hi him himself his hither hopefully how howbeit however hundred i i'd ie if ignored i'll i'm immediate in inasmuch inc inc. indeed indicate indicated indicates inner inside insofar instead into inward is isn't it it'd it'll its it's itself i've j just k keep keeps kept know known knows l last lately later latter latterly least less lest let let's like liked likely likewise little look looking looks low lower ltd m made mainly make makes many may maybe mayn't me mean meantime meanwhile merely might mightn't mine minus miss more moreover most mostly mr mrs much must mustn't my myself n name namely nd near nearly necessary need needn't needs neither never neverf neverless nevertheless new next nine ninety no nobody non none nonetheless noone no-one nor normally not nothing notwithstanding novel now nowhere o obviously of off often oh ok okay old on once one ones one's only onto opposite or other others otherwise ought oughtn't our ours ourselves out outside over overall own p particular particularly past per perhaps placed please plus possible presumably probably provided provides q que quite qv r rather rd re really reasonably recent recently regarding regardless regards relatively respectively right round s said same saw say saying says second secondly see seeing seem seemed seeming seems seen self selves sensible sent serious seriously seven several shall shan't she she'd she'll she's should shouldn't since six so some somebody someday somehow someone something sometime sometimes somewhat somewhere soon sorry specified specify specifying still sub such sup sure t take taken taking tell tends th than thank thanks thanx that that'll thats that's that've the their theirs them themselves then thence there thereafter thereby there'd therefore therein there'll there're theres there's thereupon there've these they they'd they'll they're they've thing things think third thirty this thorough thoroughly those though three through throughout thru thus till to together too took toward towards tried tries truly try trying t's twice two u un under underneath undoing unfortunately unless unlike unlikely until unto up upon upwards us use used useful uses using usually v value various versus very via viz vs w want wants was wasn't way we we'd welcome well we'll went were we're weren't we've what whatever what'll what's what've when whence whenever where whereafter whereas whereby wherein where's whereupon wherever whether which whichever while whilst whither who who'd whoever whole who'll whom whomever who's whose why will willing wish with within without wonder won't would wouldn't x y yes yet you you'd you'll your you're yours yourself yourselves you've z zero <br> br".split())
+stoplist = set(
+    ", & && || : ; < > ] [ { } 's 'S $ # % * - | + ) ( ! ~ ` `` 'u u' inn \u0631\u0627\u062d\u06cc\u0644 \u0634\u0631\u06cc\u0641\u202c @ a /br > < -- . able about above abroad according accordingly across actually adj after afterwards again against ago ahead ain't all allow allows almost alone along alongside already also although always am amid amidst among amongst an and another any anybody anyhow anyone anything anyway anyways anywhere apart appear appreciate appropriate are aren't around as a's aside ask asking associated at available away awfully b back backward backwards be became because become becomes becoming been before beforehand begin behind being believe below beside besides best better between beyond both brief but by c came can cannot cant can't caption cause causes certain certainly changes clearly c'mon co co. com come comes concerning consequently consider considering contain containing contains corresponding could couldn't course c's currently d dare daren't definitely described despite did didn't different directly do does doesn't doing done don't down downwards during e each edu eg eight eighty either else elsewhere end ending enough entirely especially et etc even ever evermore every everybody everyone everything everywhere ex exactly example except f fairly far farther few fewer fifth first five followed following follows for forever former formerly forth forward found four from further furthermore g get gets getting given gives go goes going gone got gotten greetings h had hadn't half happens hardly has hasn't have haven't having he he'd he'll hello help hence her here hereafter hereby herein here's hereupon hers herself he's hi him himself his hither hopefully how howbeit however hundred i i'd ie if ignored i'll i'm immediate in inasmuch inc inc. indeed indicate indicated indicates inner inside insofar instead into inward is isn't it it'd it'll its it's itself i've j just k keep keeps kept know known knows l last lately later latter latterly least less lest let let's like liked likely likewise little look looking looks low lower ltd m made mainly make makes many may maybe mayn't me mean meantime meanwhile merely might mightn't mine minus miss more moreover most mostly mr mrs much must mustn't my myself n name namely nd near nearly necessary need needn't needs neither never neverf neverless nevertheless new next nine ninety no nobody non none nonetheless noone no-one nor normally not nothing notwithstanding novel now nowhere o obviously of off often oh ok okay old on once one ones one's only onto opposite or other others otherwise ought oughtn't our ours ourselves out outside over overall own p particular particularly past per perhaps placed please plus possible presumably probably provided provides q que quite qv r rather rd re really reasonably recent recently regarding regardless regards relatively respectively right round s said same saw say saying says second secondly see seeing seem seemed seeming seems seen self selves sensible sent serious seriously seven several shall shan't she she'd she'll she's should shouldn't since six so some somebody someday somehow someone something sometime sometimes somewhat somewhere soon sorry specified specify specifying still sub such sup sure t take taken taking tell tends th than thank thanks thanx that that'll thats that's that've the their theirs them themselves then thence there thereafter thereby there'd therefore therein there'll there're theres there's thereupon there've these they they'd they'll they're they've thing things think third thirty this thorough thoroughly those though three through throughout thru thus till to together too took toward towards tried tries truly try trying t's twice two u un under underneath undoing unfortunately unless unlike unlikely until unto up upon upwards us use used useful uses using usually v value various versus very via viz vs w want wants was wasn't way we we'd welcome well we'll went were we're weren't we've what whatever what'll what's what've when whence whenever where whereafter whereas whereby wherein where's whereupon wherever whether which whichever while whilst whither who who'd whoever whole who'll whom whomever who's whose why will willing wish with within without wonder won't would wouldn't x y yes yet you you'd you'll your you're yours yourself yourselves you've z zero <br> br".split())
 
 WORD_NAMESPACE = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
 PARA = WORD_NAMESPACE + 'p'
@@ -40,6 +29,8 @@ TEXT = WORD_NAMESPACE + 't'
 currdir = path.dirname(__file__)
 
 currdir = currdir + "/static"
+
+
 ####END GLOBALS###
 
 
@@ -63,8 +54,7 @@ def feedback(request):
         text = content
         consepts_in_title = [word for word in nltk.word_tokenize(temp_title) if word not in stoplist]  # removing stop
         text = text.lower()
-        text = filter(lambda x: x in string.printable, text)
-        text = text.encode("utf8")
+        # text = filter(lambda x: x in string.printable, text)
         consepts_in_user_provided_doc = [word for word in nltk.word_tokenize(text) if word not in stoplist]
         consepts_in_user_provided_doc = list(OrderedDict.fromkeys(consepts_in_user_provided_doc))
 
@@ -82,7 +72,7 @@ def feedback(request):
         print
         "cj count :", k
         total_conecpts_in_user_doc = p * k
-        Save_Relation = [[0 for i in range(3)] for j in range((p * k))]  # 2D list to save search data
+        save_relation = [[0 for i in range(3)] for j in range((p * k))]  # 2D list to save search data
         r_counter = 0
 
         check = 0
@@ -118,38 +108,38 @@ def feedback(request):
             wiki_concepts_7 = [word for word in nltk.word_tokenize(text_7) if word not in stoplist]
             pass  # do nothing
         except Exception as e:
-            print(e," |there is an error while fetching wiki data ++++")
+            print(e, " |there is an error while fetching wiki data ++++")
         check = 1
 
         for ci in consepts_in_user_provided_doc:
             for cj in consepts_in_title:
                 for x in range(0, use_top):
-                    if (x == 3 and check == 0):
+                    if x == 3 and check == 0:
                         words = wiki_concepts_1
-                    elif (x == 4 and check == 0):
+                    elif x == 4 and check == 0:
                         words = wiki_concepts_2
-                    elif (x == 5 and check == 0):
+                    elif x == 5 and check == 0:
                         words = wiki_concepts_3
-                    elif (x == 6 and check == 0):
+                    elif x == 6 and check == 0:
                         words = wiki_concepts_4
-                    elif (x == 7 and check == 0):
+                    elif x == 7 and check == 0:
                         words = wiki_concepts_5
-                    elif (x == 8 and check == 0):
+                    elif x == 8 and check == 0:
                         words = wiki_concepts_6
-                    elif (x == 9 and check == 0):
+                    elif x == 9 and check == 0:
                         words = wiki_concepts_7
-                    
+
                     if ci in words:
                         search[count][0] = 1  # ci(A) is found in count file #
                     if cj in words:
                         search[count][1] = 1  # cj(B) is found in count file #
                     count = count + 1
                 for x in range(0, (use_top)):
-                    if ((search[x][0] and search[x][1]) == 1):  # Both Ci(A) and Cj(B) found in x file in the List
+                    if (search[x][0] and search[x][1]) == 1:  # Both Ci(A) and Cj(B) found in x file in the List
                         both = both + 1
-                    if (search[x][0] == 1):  # Ci(A) found in x file in the List
+                    if search[x][0] == 1:  # Ci(A) found in x file in the List
                         A_c = A_c + 1
-                    if (search[x][1] == 1):  # Cj(B) found in x file in the List
+                    if search[x][1] == 1:  # Cj(B) found in x file in the List
                         B_c = B_c + 1
                 print(search)
                 print(both)  # cij - count
@@ -159,11 +149,11 @@ def feedback(request):
                     A_c = 1
                 if B_c == 0:
                     B_c = 1
-                relation = (((both * both)) / (A_c * B_c))
+                relation = ((both * both) / (A_c * B_c))
         print("Relation  between [", ci, "] and [", cj, "] = ", relation)
-        Save_Relation[r_counter][0] = ci
-        Save_Relation[r_counter][1] = cj
-        Save_Relation[r_counter][2] = relation
+        save_relation[r_counter][0] = ci
+        save_relation[r_counter][1] = cj
+        save_relation[r_counter][2] = relation
         search = [[0 for i in range(2)] for j in range(use_top)]
         count = 0
         both = 0.0
@@ -172,38 +162,38 @@ def feedback(request):
         relation = 0.0
         r_counter = r_counter + 1
 
-        Save_Relation.sort(key=lambda x: x[2], reverse=True)
-        count_TH = 0
+        save_relation.sort(key=lambda x: x[2], reverse=True)
+        count_th = 0
         correlation_th_percentage = 0.4  # only concepts that are grater or == then this ration will appear in correlation map
         concept_map_th_percentage = 0.5  # only concepts that are grater or == then this ration will appear in concept map
-        for i in Save_Relation:
-            if (i[2] >= concept_map_th_percentage):
+        for i in save_relation:
+            if i[2] >= concept_map_th_percentage:
                 wordle_text.append(i[0])
-            if (i[2] >= correlation_th_percentage):
-                count_TH = count_TH + 1
-        Best_Relation = [[0 for i in range(3)] for j in range(count_TH)]
-        Temp_TH = 0
+            if i[2] >= correlation_th_percentage:
+                count_th = count_th + 1
+        best_relation = [[0 for i in range(3)] for j in range(count_th)]
+        temp_th = 0
         best_match = 0
         less_match = 0
-        for i in Save_Relation:
-            if (i[2] >= correlation_th_percentage):  # use this loop for extracting desired relational data for wordle
-                Best_Relation[Temp_TH][0] = i[0]
-                Best_Relation[Temp_TH][1] = i[1]
-                Best_Relation[Temp_TH][2] = i[2]
-                Temp_TH = Temp_TH + 1
-            if (i[2] >= 0.5):  # use this for other calculations
+        for i in save_relation:
+            if i[2] >= correlation_th_percentage:  # use this loop for extracting desired relational data for wordle
+                best_relation[temp_th][0] = i[0]
+                best_relation[temp_th][1] = i[1]
+                best_relation[temp_th][2] = i[2]
+                temp_th = temp_th + 1
+            if i[2] >= 0.5:  # use this for other calculations
                 best_match = best_match + 1
-            if (i[2] > 0 and i[2] < 0.5):
+            if 0 < i[2] < 0.5:
                 less_match = less_match + 1
 
-        if (count_TH > 0):
-            Relations = np.array(Best_Relation)
+        if count_th > 0:
+            relations = np.array(best_relation)
 
-            x = np.array(Relations[:, 0])
+            x = np.array(relations[:, 0])
             x = x.astype(str)
-            y = np.array(Relations[:, 1])
+            y = np.array(relations[:, 1])
             y = y.astype(str)
-            z = np.array(Relations[:, 2])
+            z = np.array(relations[:, 2])
             z = z.astype(float)
 
             df = pd.DataFrame.from_dict(np.array([x, y, z]).T)
@@ -245,7 +235,7 @@ def feedback(request):
 
         wordle_text = " ".join(wordle_text)
 
-        if (wordle_text == "" or wordle_text == " "):
+        if wordle_text == "" or wordle_text == " ":
             create_wordcloud("N0 Concept Concept Concept Concept Found Found Found  ")
         else:
             create_wordcloud(wordle_text)
@@ -275,4 +265,3 @@ def get_wiki(query):
     # get wikipedia page for selected title
     page = wikipedia.page(query)
     return page.content
-
