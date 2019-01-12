@@ -32,6 +32,14 @@ python manage.py runserver
 
 then you can access formative feedbacker at http://127.0.0.1:8000/
 
+### Sample Input
+![input](3.png)
+
+### Sample Output
+
+![wordcloud](1.png)
+
+![pie chart](2.png)
 
 ## Contributing
 
