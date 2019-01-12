@@ -1,15 +1,31 @@
 import re
-import os
+from os import path
+
 import nltk
 import numpy as np
 import wikipedia
-from os import path
 from PIL import Image
-from wordcloud import WordCloud, STOPWORDS
 from django.shortcuts import render, redirect
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+from wordcloud import WordCloud, STOPWORDS
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
-currdir = path.dirname(__file__) + "/static"
-STOPWORDS = os.path.join(currdir, "stop_words_list.txt")
+currdir = "static"
+STOPWORDS = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', 'your', 'yours', 'yourself',
+             'yourselves', 'he', 'him', 'his', 'himself', 'she', 'her', 'hers', 'herself', 'it', 'its', 'itself',
+             'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', 'these',
+             'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do',
+             'does', 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because', 'as', 'until', 'while',
+             'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before',
+             'after', 'above', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again',
+             'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each',
+             'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than',
+             'too', 'very', 's', 't', 'can', 'will', 'just', 'don', 'should', 'now']
+MAX_ARTICLES = 30
 
 
 def index(request):
@@ -21,8 +37,31 @@ def feedback(request):
         title = request.POST.get("title")
         content = request.POST.get("content")
         concepts = get_concepts(content)
-        articles = [get_wiki(concept) for concept in concepts]
-        # TODO: Implement cosine similarity between articles & title of content to know how much relevant it is
+        articles = [get_wiki(concept) for i, concept in enumerate(concepts) if i <= MAX_ARTICLES]
+        tfidf = TfidfVectorizer()
+        scores = []
+        print(articles)
+        for article in articles:
+            if article:
+                tfidf_matrix = tfidf.fit_transform([content, article["content"]])
+                similarity = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix)[0][1]
+                scores.append({"title": article["title"], "score": round((((similarity / 1) * 10 + 10) / 20) * 10, 3)})
+        titles = []
+        less_related = 0
+        most_related = 0
+        not_related = 0
+        total = len(scores)
+        for score in scores:
+            if score["score"] > 2.0:
+                less_related += 1
+                titles.append(score["title"])
+            if score["score"] > 3.5:
+                most_related += 1
+            else:
+                not_related += 1
+
+        create_wordcloud(" ".join(str(x) for x in titles))
+        create_pi_chart(less_related, most_related, not_related, total)
         return render(request, "feedback.html")
     else:
         return redirect('dashboard:landing')
@@ -39,9 +78,26 @@ def create_wordcloud(text):
     wc.to_file(path.join(currdir, "wordle.png"))
 
 
+def create_pi_chart(less_related, most_related, not_related, total):
+    most_related = (most_related/total)*100
+    less_related = (less_related/total)*100
+    not_related = (not_related/total)*100
+    df = pd.DataFrame({'Concepts Distribution': [float("{0:.2f}".format(most_related)),
+                                                 float("{0:.2f}".format(less_related)),
+                                                 float("{0:.2f}".format(not_related))], },
+                      index=[str(most_related), str(less_related), str(not_related)])
+    p = df.plot.pie(y='Concepts Distribution', figsize=(6, 6), colors=['cadetblue', 'skyblue', 'lightcoral'])
+    p.get_figure().savefig(path.join(currdir, "pi_chart.png"))
+    plt.close()
+
+
 def get_wiki(query):
-    page = wikipedia.page(query)
-    return page.content
+    try:
+        page = wikipedia.page(query)
+        return {"title": page.title, "content": page.content}
+    except:
+        print(f"Too broad concept {query}")
+    return ""
 
 
 def get_concepts(content):
@@ -111,10 +167,7 @@ class WordsExtractor:
         """
 
         tokenized_txt = self._clean_in(tokenized_txt)
-
-        with open(STOPWORDS, "r") as stop_words_file:
-            stop_words = stop_words_file.read()
-            return [word for word in tokenized_txt if word not in stop_words]
+        return [word for word in tokenized_txt if word not in STOPWORDS]
 
     def tag_words(self, cleaned_words):
 
