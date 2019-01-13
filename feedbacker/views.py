@@ -14,6 +14,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+nltk.download('averaged_perceptron_tagger')
+
 currdir = "static"
 STOPWORDS = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', 'your', 'yours', 'yourself',
              'yourselves', 'he', 'him', 'his', 'himself', 'she', 'her', 'hers', 'herself', 'it', 'its', 'itself',
