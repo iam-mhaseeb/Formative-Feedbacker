@@ -21,7 +21,7 @@ seaborn==0.9.0
 singledispatch==3.4.0.3
 six==1.12.0
 sklearn
-urllib3==1.24.1
+urllib3==1.24.2
 whitenoise==4.1.2
 wikipedia==1.4.0
 wordcloud==1.5.0
